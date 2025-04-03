@@ -14,7 +14,9 @@ export default function CalendarApp(){
   const currentDate = new Date;
   currentDate.setHours(0,0,0,0);
   const [monthIndex, setMonthIndex] = useState(currentDate.getMonth());
-  const [selectedDay, setSelectedDay] = useState(currentDate);
+  const [selectedDay, setSelectedDay] = useState(-1);
+  const [initialSelectedDayIndex, setInitialSelectedDayIndex] = useState(-1);
+  
   const dateOnDisplay = new Date(currentDate.getFullYear(), monthIndex, 1);
   const totalDays = lastDayOfMonthFn(dateOnDisplay).getDate();
   
@@ -27,19 +29,38 @@ export default function CalendarApp(){
     return newDate;
   });
   
+    console.log({initialSelectedDayIndex});
+    let index = -1;
+    if(initialSelectedDayIndex === -1){
+      index = dates.findIndex((date) => {
+        // if formatted date is in fakeData and the evaluated date is after today
+        // console.log(`${date} ${currentDate} ${Object.keys(fakeData).includes(formatDate(date))} ${date >= dateOnDisplay}`);
+        
+        return date >= currentDate && Object.keys(fakeData).includes(formatDate(date)) ;
+      })
+      // if we found an index, then set the initial selected index to it.
+      index >= 0 && setInitialSelectedDayIndex(index)
+      console.log(`useEffect, ${index}`);
+    }
+  
+  
+    // Avoid unnecessary renders
+    // if (index) {
+    //   setInitialSelectedDayIndex(index);
+    // }
+
   indexOfFirstDayAvailable = dates.findIndex((date) => {
   // if formatted date is in fakeData and the evaluated date is after today
-    console.log(`${date} ${currentDate} ${Object.keys(fakeData).includes(formatDate(date))} ${date >= dateOnDisplay}`);
     
     return date >= currentDate && Object.keys(fakeData).includes(formatDate(date)) ;
   })
 
-  console.log(indexOfFirstDayAvailable);
-
   // Adjust the month using an offset (e.g., -1 for previous, +1 for next).
   const handleMonthChange = (offset) => {
+    // resets the index of the selected day to none
+    setInitialSelectedDayIndex(-1);
+    // change the month index to display to requested one
     setMonthIndex((prev) => prev + offset);
-    console.log(indexOfFirstDayAvailable);    
   };
   
   return(
@@ -52,18 +73,18 @@ export default function CalendarApp(){
         />
         <CalendarGrid 
           dates={dates} 
-          onSelectDate={setSelectedDay}
+          onSelectDate={setInitialSelectedDayIndex}
           data={fakeData} 
           selectedDay={selectedDay} 
           currentDate={currentDate}
-          indexOfFirstDayAvailable ={indexOfFirstDayAvailable}
+          initialSelectedDayIndex ={initialSelectedDayIndex}
         />
       </div>
       <div className="availability">
         <AvailabilitySection
           data={fakeData}
           dates={dates}
-          indexOfFirstDayAvailable ={indexOfFirstDayAvailable}
+          indexOfFirstDayAvailable ={initialSelectedDayIndex}
         />
       </div>
     </div>
