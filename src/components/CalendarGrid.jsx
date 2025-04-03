@@ -10,8 +10,7 @@ export default function CalendarGrid({dates, onSelectDate, data, selectedDay, cu
   const today = formatDate(todaysDate); 
 
   function isAvailable(date){
-    //TODO: determine if the element's date array is empty
-    return Object.keys(data).includes(formatDate(date)) && todaysDate.getTime() <= date.getTime() ;
+    return date >= currentDate && Object.keys(data).includes(formatDate(date)) ;
   }
 
   

@@ -1,6 +1,7 @@
 import formatDate from "../utils/utils";
 
-export default function AvailabilitySection({data, selectedDay}){
+export default function AvailabilitySection({data, dates, indexOfFirstDayAvailable}){
+  const selectedDay = dates[indexOfFirstDayAvailable];
   const selectedDateStr = formatDate(selectedDay);
   const hours = data[selectedDateStr] || []
   const formattedDate = selectedDay ? `${selectedDay.getDate()} ${selectedDay.toLocaleString('default', { month: 'long' })} ${selectedDay.getFullYear()}` : '';

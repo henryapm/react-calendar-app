@@ -39,8 +39,7 @@ export default function CalendarApp(){
   // Adjust the month using an offset (e.g., -1 for previous, +1 for next).
   const handleMonthChange = (offset) => {
     setMonthIndex((prev) => prev + offset);
-    console.log(indexOfFirstDayAvailable);
-    
+    console.log(indexOfFirstDayAvailable);    
   };
   
   return(
@@ -62,8 +61,9 @@ export default function CalendarApp(){
       </div>
       <div className="availability">
         <AvailabilitySection
-          data={fakeData} 
-          selectedDay={selectedDay}
+          data={fakeData}
+          dates={dates}
+          indexOfFirstDayAvailable ={indexOfFirstDayAvailable}
         />
       </div>
     </div>
